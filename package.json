@@ -10,16 +10,8 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@codemirror/lang-javascript": "^6.2.2",
-        "@codemirror/state": "^6.4.1",
-        "@codemirror/view": "^6.35.0",
-        "@uiw/react-codemirror": "^4.23.6",
-        "codemirror": "^6.0.1",
         "docx": "^9.1.0",
-        "docx-templates": "^4.13.0",
-        "docxtemplater": "^3.54.1",
         "file-saver": "^2.0.5",
-        "pizzip": "^3.1.7",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "split-lines": "^3.0.0"
