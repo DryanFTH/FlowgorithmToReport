@@ -21,30 +21,24 @@ function App() {
     const [Pseudocode, setPseudocode] = useState('')
 
     useEffect(() => {
-        // Fungsi untuk mengecek posisi scroll
         const handleScroll = () => {
             setScrollPosition(window.scrollY)
         }
 
-        // Menambahkan event listener saat scroll
         window.addEventListener('scroll', handleScroll)
 
-        // Menghapus event listener saat komponen unmount
         return () => {
             window.removeEventListener('scroll', handleScroll)
         }
     }, [])
 
     useEffect(() => {
-        // Fungsi untuk mengecek lebar jendela dan memperbarui state
         const handleResize = () => {
             setIsMobile(window.innerWidth < 768)
         }
 
-        // Menambahkan event listener saat resize
         window.addEventListener('resize', handleResize)
 
-        // Menghapus event listener saat komponen unmount
         return () => {
             window.removeEventListener('resize', handleResize)
         }
@@ -55,14 +49,12 @@ function App() {
         const generateToken = tokenizer()
         const generateParser = parse(generateToken)
         const all = parseLevel(generateParser, 0)
-        console.log(generateToken, generateParser, all)
 
         let maxDepth = 0
 
         function traverseAst(nodes: node[], depth = 1, reference = 'numbered') {
             if (depth > maxDepth) maxDepth = depth
             return nodes.flatMap((node, index) => {
-                console.log(depth, node.type)
                 const paragraph: Paragraph[] = []
 
                 if (depth === 1 && index === 0) {
@@ -170,8 +162,6 @@ function App() {
             }
 
             numbering.push(numbereds, numbereds2, ifStates)
-
-            console.log(numbering)
 
             return numbering
         }
@@ -335,8 +325,6 @@ function App() {
         }
 
         if (Dimensions && FlowChart && SourceCode) {
-            console.log(Dimensions)
-
             additional = [
                 new Paragraph({
                     children: [
@@ -409,8 +397,6 @@ function App() {
             ]
         }
 
-        console.log(additional)
-
         travers().then(async value => {
             const numberingConfig = createNumbering()
             const doc = new Document({
@@ -434,7 +420,6 @@ function App() {
             })
 
             saveAs(await Packer.toBlob(doc), `${Absen}_${NIM}_${Name}_${Title}.docx`)
-            console.log(numberingConfig)
         })
     }
 
@@ -496,8 +481,6 @@ function App() {
                     level: 0,
                 })
             } else if (line.startsWith('If')) {
-                console.log(line)
-
                 tokens.push({
                     type: 'If',
                     description: `Jika ${line.substring(3)}, maka :`,
@@ -506,8 +489,6 @@ function App() {
                     level: 0,
                 })
             } else if (line.startsWith('While')) {
-                console.log(line)
-
                 tokens.push({
                     type: 'While',
                     description: `Dilakukan looping ketika kondisi ${line.substring(6)} bernilai benar, maka :`,
@@ -563,11 +544,7 @@ function App() {
         const ast: node[] = []
         const stack: node[] = []
 
-        console.log(tokens, 'aaaaaaaaaaaaaaaaaaaaaa')
-
         tokens.forEach(token => {
-            console.log(token.type, token.description)
-
             if (token.type === 'If') {
                 const node = { ...token, block: [], elseBlock: null }
                 stack.push(node)
@@ -584,7 +561,6 @@ function App() {
                 const last: node | undefined = stack.pop()
 
                 if (last && last.type == 'If') {
-                    console.log('else', last.description)
                     last.elseBlock = []
                     stack.push(last)
                 }
@@ -623,8 +599,6 @@ function App() {
             } else if (stack.length > 0) {
                 const last: any = stack[stack.length - 1]
 
-                console.log(last.elseBlock ? 's' : 'd', last.elseBlock, last.type)
-
                 if (last.elseBlock && last.type == 'If') {
                     last.elseBlock.push({ ...token })
                 } else {
@@ -641,11 +615,7 @@ function App() {
     const parseLevel = (ast: node[], level: number) => {
         const astLevel: node[] = []
 
-        console.log(ast)
-
         ast.forEach(node => {
-            console.log(node)
-
             const clone = { ...node }
             if (node.type === 'If' || node.type === 'While' || node.type === 'For') {
                 clone.block = parseLevel(clone.block, level + 1)
