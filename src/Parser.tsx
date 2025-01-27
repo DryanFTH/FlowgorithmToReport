@@ -17,7 +17,7 @@ import {
     Return,
     While,
 } from './Nodes'
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 export function tokenizer(Pseudocode: string) {
     const lines = splitLines(Pseudocode)
@@ -61,7 +61,7 @@ export function tokenizer(Pseudocode: string) {
 }
 
 export function parse(tokens: CommonNode[]) {
-    tokens = _.cloneDeep(tokens)
+    tokens = cloneDeep(tokens)
     const ast: CommonNode[] = []
     const stack: BlockNode[] = []
 
@@ -124,7 +124,7 @@ export function parse(tokens: CommonNode[]) {
 }
 
 export function parseLevel(ast: CommonNode[], level: number) {
-    ast = _.cloneDeep(ast)
+    ast = cloneDeep(ast)
     const astLevel: CommonNode[] = []
 
     ast.forEach(node => {

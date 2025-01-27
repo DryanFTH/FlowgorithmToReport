@@ -1,4 +1,4 @@
-import _, { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 interface Descriptive {
     description: string
@@ -58,12 +58,13 @@ class CommonNode implements Descriptive, Levelable {
         this.level--
     }
 
+    // @ts-expect-error
     static load(line: string): CommonNode {
         return new CommonNode('', 0)
     }
 
     clone(): this {
-        return _.cloneDeep(this)
+        return cloneDeep(this)
     }
 }
 
@@ -80,7 +81,7 @@ class BlockNode extends CommonNode {
     }
 
     setBlocks(block: CommonNode[]) {
-        this.block = _.cloneDeep(block)
+        this.block = cloneDeep(block)
     }
 
     addBlock(block: CommonNode) {
@@ -146,7 +147,7 @@ class IfNode extends BlockNode implements ElseBlock {
     }
 
     setElseBlocks(block: CommonNode[]) {
-        this.elseBlock = _.cloneDeep(block)
+        this.elseBlock = cloneDeep(block)
     }
 
     addElseBlock(block: CommonNode) {
@@ -196,18 +197,21 @@ class Loop extends CommonNode {
 }
 
 class Do extends BlockNode {
+    // @ts-expect-error
     static load(line: string): Do {
         return new Do('', 0, [])
     }
 }
 
 class Else extends CommonNode {
+    // @ts-expect-error
     static load(line: string): Else {
         return new Else('', 0)
     }
 }
 
 class End extends CommonNode {
+    // @ts-expect-error
     static load(line: string): End {
         return new End('', 0)
     }

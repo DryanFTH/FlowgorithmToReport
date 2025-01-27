@@ -1,7 +1,7 @@
 import { convertInchesToTwip, Document, FileChild, ImageRun, Packer, PageBreak, Paragraph, Tab, TextRun } from 'docx'
 import { saveAs } from 'file-saver'
 import { BlockNode, CommonNode, Do, For, Function, IfNode, While } from './Nodes'
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 
 export async function processDatum(
     generateParsedLevel: CommonNode[],
@@ -404,8 +404,8 @@ const createNumbering = (maxDepth: number, func: number) => {
                 },
             }
 
-            listing1.levels.push(_.cloneDeep(numbered))
-            listing2.levels.push(_.cloneDeep(numbered))
+            listing1.levels.push(cloneDeep(numbered))
+            listing2.levels.push(cloneDeep(numbered))
         }
         numbering.push(listing1, listing2)
     }
