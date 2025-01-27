@@ -1,6 +1,6 @@
 import { convertInchesToTwip, Document, FileChild, ImageRun, Packer, PageBreak, Paragraph, Tab, TextRun } from 'docx'
 import { saveAs } from 'file-saver'
-import { BlockNode, CommonNode, Do, For, Function, IfNode, While } from './Nodes'
+import { BlockNode, CommonNode, Function, IfNode } from './Nodes'
 import cloneDeep from 'lodash/cloneDeep'
 
 export async function processDatum(
