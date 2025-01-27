@@ -12,9 +12,8 @@ function App() {
     const [Class, setClass] = useState('')
     const [Title, setTitle] = useState('')
 
-    const [Dimensions] = useState<{ [key: string]: { width: number; height: number } }>({} as any)
-    const [FlowChart, setFlowChart] = useState<File | null>(null)
-    const [SourceCode, setSourceCode] = useState<File | null>(null)
+    const [FlowChart, setFlowChart] = useState<File[] | null>(null)
+    const [SourceCode, setSourceCode] = useState<File[] | null>(null)
     const [Pseudocode, setPseudocode] = useState('')
 
     useEffect(() => {
@@ -45,9 +44,9 @@ function App() {
         ev.preventDefault()
         const generateToken = tokenizer(Pseudocode)
         const generateParsed = parse(generateToken)
-        const generateParsedLevel = parseLevel(generateParsed, 0)
+        const generateParsedLevel = parseLevel(generateParsed, -1)
 
-        processDatum(generateParsedLevel, Absen, Name, NIM, Class, Title, Dimensions, FlowChart, SourceCode)
+        processDatum(generateParsedLevel, Absen, Name, NIM, Class, Title, FlowChart, SourceCode)
     }
 
     return (
@@ -89,7 +88,7 @@ function App() {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="absolute -bottom-1 left-0">
                     <path
                         fill="#3b82f6 "
-                        fill-opacity="1"
+                        fillOpacity="1"
                         d="M0,160L30,160C60,160,120,160,180,176C240,192,300,224,360,213.3C420,203,480,149,540,122.7C600,96,660,96,720,122.7C780,149,840,203,900,186.7C960,171,1020,85,1080,74.7C1140,64,1200,128,1260,165.3C1320,203,1380,213,1410,218.7L1440,224L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"
                     ></path>
                 </svg>
@@ -130,106 +129,144 @@ function App() {
             </div>
             <form
                 onSubmit={whenSubmit}
-                className="w-screen min-h-screen bg-gray-200 p-4 py-8 pb-16 flex flex-col gap-4 items-center scroll-m-20"
+                className="w-screen min-h-screen h-fit bg-gray-200 p-4 py-8 pb-16 flex flex-col items-center gap-4 scroll-m-20 "
                 id="converter"
             >
                 <h1 className="font-black text-[2rem] md:text-[3.5rem]">Flowgorithm To Report</h1>
-                <input
-                    type="text"
-                    value={Absen}
-                    onChange={ev => setAbsen(ev.target.value)}
-                    placeholder="Masukkan absen anda"
-                    className="w-full md:w-1/2 rounded-full p-2 px-3"
-                />
-                <input
-                    type="text"
-                    value={Name}
-                    onChange={ev => setName(ev.target.value)}
-                    placeholder="Masukkan nama anda"
-                    className="w-full md:w-1/2 rounded-full p-2 px-3"
-                />
-                <input
-                    type="text"
-                    value={NIM}
-                    onChange={ev => setNIM(ev.target.value)}
-                    placeholder="Masukkan nim anda"
-                    className="w-full md:w-1/2 rounded-full p-2 px-3"
-                />
-                <input
-                    type="text"
-                    value={Class}
-                    onChange={ev => setClass(ev.target.value)}
-                    placeholder="Masukkan kelas anda"
-                    className="w-full md:w-1/2 rounded-full p-2 px-3"
-                />
-                <input
-                    type="text"
-                    value={Title}
-                    onChange={ev => setTitle(ev.target.value)}
-                    placeholder="Masukkan judul tugas anda"
-                    className="w-full md:w-1/2 rounded-full p-2 px-3"
-                />
-                <textarea
-                    name=""
-                    className="w-full md:w-1/2 h-1/2 rounded-xl p-2 focus:border-none focus:outline-none"
-                    placeholder="Tempel Source code Auto Pseudocode nya di sini"
-                    value={Pseudocode}
-                    onChange={ev => setPseudocode(ev.target.value)}
-                ></textarea>
-                <div className="flex flex-col gap-4 w-full md:w-1/2 bg-white rounded-3xl p-2 px-4">
-                    <h1 className="font-black text-lg">Masukkan Gambar Flowchart nya</h1>
-                    <input
-                        type="file"
-                        accept=".jpg,.png"
-                        onChange={ev => {
-                            const file = ev.target.files?.[0]
-                            setFlowChart(file || null)
-                        }}
-                        className='className="w-full '
-                    />
-                </div>
-                <div className="flex flex-col gap-4 w-full md:w-1/2 bg-white rounded-3xl p-2 px-4">
-                    <h1 className="font-black text-lg">Masukkan Gambar Source Code nya</h1>
-                    <input
-                        type="file"
-                        accept=".jpg,.png"
-                        onChange={ev => {
-                            const file = ev.target.files?.[0]
-                            setSourceCode(file || null)
-                        }}
-                        className='className="w-full'
-                    />
+                <div className="flex flex-col md:flex-row gap-4 items-start md:min-h-[60vh] h-fit w-full md:px-16">
+                    <div className="flex flex-col gap-4 w-full">
+                        <input
+                            type="text"
+                            value={Absen}
+                            onChange={ev => setAbsen(ev.target.value)}
+                            placeholder="Masukkan absen anda"
+                            className="w-full rounded-full p-2 px-3"
+                        />
+                        <input
+                            type="text"
+                            value={Name}
+                            onChange={ev => setName(ev.target.value)}
+                            placeholder="Masukkan nama anda"
+                            className="w-full rounded-full p-2 px-3"
+                        />
+                        <input
+                            type="text"
+                            value={NIM}
+                            onChange={ev => setNIM(ev.target.value)}
+                            placeholder="Masukkan nim anda"
+                            className="w-full rounded-full p-2 px-3"
+                        />
+                        <input
+                            type="text"
+                            value={Class}
+                            onChange={ev => setClass(ev.target.value)}
+                            placeholder="Masukkan kelas anda"
+                            className="w-full rounded-full p-2 px-3"
+                        />
+                        <input
+                            type="text"
+                            value={Title}
+                            onChange={ev => setTitle(ev.target.value)}
+                            placeholder="Masukkan judul tugas anda"
+                            className="w-full rounded-full p-2 px-3"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-4 w-full items-center">
+                        <textarea
+                            name=""
+                            className="w-full h-52 md:h-[60vh] rounded-xl p-2 focus:border-none focus:outline-none"
+                            placeholder="Tempel Source code Auto Pseudocode nya di sini"
+                            value={Pseudocode}
+                            onChange={ev => setPseudocode(ev.target.value)}
+                        ></textarea>
+                        <button
+                            className="bg-blue-500 text-lg md:text-xl hidden  w-fit text-white rounded-full px-4 py-2 md:flex justify-center items-center duration-300 hover:outline hover:outline-1 hover:outline-blue-500 hover:bg-white hover:text-blue-500"
+                            type="submit"
+                        >
+                            Buatkan
+                        </button>
+                    </div>
+                    <div className="flex flex-col gap-4 w-full md:min-h-full md:h-fit">
+                        <div className="flex flex-col gap-4 w-full md:h-full bg-white rounded-3xl p-2 px-4">
+                            <h1 className="font-black text-lg">Masukkan Gambar Flowchart nya</h1>
+                            <label
+                                htmlFor="flowchart"
+                                className="w-full bg-blue-600 cursor-pointer text-white text-center rounded-md py-2 hover:outline hover:outline-1 hover:outline-blue-500 hover:bg-white hover:text-blue-500 duration-300"
+                            >
+                                <h1>Upload Gambar</h1>
+                            </label>
+                            <div className="grid grid-cols-4 gap-4">
+                                {FlowChart &&
+                                    FlowChart.map(file => (
+                                        <img
+                                            src={URL.createObjectURL(file)}
+                                            className="rounded-md h-20 aspect-square outline outline-1 outline-gray-500"
+                                        />
+                                    ))}
+                            </div>
+                            <input
+                                id="flowchart"
+                                type="file"
+                                accept=".jpg,.jpe,.jpeg,.png,.webp,.gif,.bmp,.svg,.svgz"
+                                multiple
+                                onChange={ev => {
+                                    if (!ev.target.files) return
+
+                                    const file = Array.from(ev.target.files)
+                                    setFlowChart(file || null)
+                                }}
+                                className="hidden"
+                            />
+                        </div>
+                        <div className="flex flex-col gap-4 w-full md:min-h-full h-fit bg-white rounded-3xl p-2 px-4">
+                            <h1 className="font-black text-lg">Masukkan Gambar Source Code nya</h1>
+                            <label
+                                htmlFor="sourcecode"
+                                className="w-full bg-blue-600 cursor-pointer text-white text-center rounded-md py-2 hover:outline hover:outline-1 hover:outline-blue-500 hover:bg-white hover:text-blue-500 duration-300"
+                            >
+                                <h1>Upload Gambar</h1>
+                            </label>
+                            <div className="grid grid-cols-4 gap-4">
+                                {SourceCode &&
+                                    SourceCode.map(file => (
+                                        <img
+                                            src={URL.createObjectURL(file)}
+                                            className="rounded-md h-20 aspect-square outline outline-1 outline-gray-500"
+                                        />
+                                    ))}
+                            </div>
+                            <input
+                                id="sourcecode"
+                                type="file"
+                                accept=".jpg,.jpe,.jpeg,.png,.webp,.gif,.bmp,.svg,.svgz"
+                                multiple
+                                onChange={ev => {
+                                    if (!ev.target.files) return
+
+                                    const file = Array.from(ev.target.files)
+                                    setSourceCode(file || null)
+                                }}
+                                className='className=" hidden'
+                            />
+                        </div>
+                    </div>
                 </div>
                 <button
-                    className="bg-blue-500 w-fit text-white rounded-full px-4 py-2 flex justify-center items-center duration-300 hover:outline hover:outline-1 hover:outline-blue-500 hover:bg-white hover:text-blue-500"
+                    className="bg-blue-500 text-lg md:text-xl md:hidden w-fit text-white rounded-full px-4 py-2 flex justify-center items-center duration-300 hover:outline hover:outline-1 hover:outline-blue-500 hover:bg-white hover:text-blue-500"
                     type="submit"
                 >
                     Buatkan
                 </button>
             </form>
             <footer className="bg-blue-500 w-screen p-8 flex flex-col gap-8">
-                <h1 className="font-black text-[2rem] md:text-[3.5rem] text-center text-white">Project ini dibuat oleh kami</h1>
+                <h1 className="font-black text-[2rem] md:text-[3.5rem] text-center text-white">Project ini dibuat oleh saya</h1>
                 <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
                     <div className="bg-white p-4 md:p-8 w-full md:w-fit rounded-3xl text-center shadow duration-300 hover:-translate-y-2">
                         <h1 className="font-black uppercase text-xl md:text-2xl">Mohamad Adrian Faturachman</h1>
                         <h1>Teknik Informatika | TF24A</h1>
                         <a
                             href="https://www.instagram.com/justordinary_ryan/"
-                            className="flex justify-center items-center gap-2 hover:fill-purple-600 hover:text-purple-600"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="size-8" viewBox="0 0 512 512">
-                                <path d="M349.33 69.33a93.62 93.62 0 0193.34 93.34v186.66a93.62 93.62 0 01-93.34 93.34H162.67a93.62 93.62 0 01-93.34-93.34V162.67a93.62 93.62 0 0193.34-93.34h186.66m0-37.33H162.67C90.8 32 32 90.8 32 162.67v186.66C32 421.2 90.8 480 162.67 480h186.66C421.2 480 480 421.2 480 349.33V162.67C480 90.8 421.2 32 349.33 32z" />
-                                <path d="M377.33 162.67a28 28 0 1128-28 27.94 27.94 0 01-28 28zM256 181.33A74.67 74.67 0 11181.33 256 74.75 74.75 0 01256 181.33m0-37.33a112 112 0 10112 112 112 112 0 00-112-112z" />
-                            </svg>
-                            <h1>Instagram</h1>
-                        </a>
-                    </div>
-                    <div className="bg-white p-4 md:p-8 w-full md:w-fit rounded-3xl text-center shadow duration-300 hover:-translate-y-2">
-                        <h1 className="font-black uppercase text-xl md:text-2xl">Gavin Afriel Permana</h1>
-                        <h1>Teknik Informatika | TF24A</h1>
-                        <a
-                            href="https://www.instagram.com/ini_vinnz/"
-                            className="flex justify-center items-center gap-2 hover:fill-purple-600 hover:text-purple-600"
+                            className="flex justify-center items-center gap-2 hover:fill-purple-500 hover:text-purple-500"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="size-8" viewBox="0 0 512 512">
                                 <path d="M349.33 69.33a93.62 93.62 0 0193.34 93.34v186.66a93.62 93.62 0 01-93.34 93.34H162.67a93.62 93.62 0 01-93.34-93.34V162.67a93.62 93.62 0 0193.34-93.34h186.66m0-37.33H162.67C90.8 32 32 90.8 32 162.67v186.66C32 421.2 90.8 480 162.67 480h186.66C421.2 480 480 421.2 480 349.33V162.67C480 90.8 421.2 32 349.33 32z" />
