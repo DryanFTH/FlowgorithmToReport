@@ -18,7 +18,9 @@ export async function processDatum(
 
     function traverseAst(nodes: CommonNode[], depth = 1, reference = 'listing-func1', level: number = 1) {
         if (depth > maxDepth) maxDepth = depth
-        func = nodes.length
+        const f = nodes.filter(value => value instanceof Function).length
+        func = f != 0 ? f : func
+
         return nodes.flatMap((node, index) => {
             const paragraph: Paragraph[] = []
 
@@ -47,10 +49,7 @@ export async function processDatum(
                 )
             }
 
-            if (
-                (node instanceof IfNode || node instanceof While || node instanceof For || node instanceof Do) &&
-                node instanceof BlockNode
-            ) {
+            if (!(node instanceof Function) && node instanceof BlockNode) {
                 paragraph.push(
                     new Paragraph({
                         text: node instanceof IfNode ? 'Jika bernilai BENAR, maka :' : 'Jika looping berjalan, maka :',
@@ -381,7 +380,7 @@ const createNumbering = (maxDepth: number, func: number) => {
 
     numbering.push(numbereds, numbereds2, ifStates)
 
-    for (let index = 1; index < func; index++) {
+    for (let index = 1; index <= func; index++) {
         const listing1 = {
             reference: `listing-func${index}-1`,
             levels: [] as any,
