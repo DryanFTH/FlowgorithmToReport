@@ -21,3 +21,15 @@ FlowgorithmToReport adalah solusi baru! hanya dengan mengisi kolom kolom akan di
 <img src="/public/steps/image7.webp">
 8. Akan ada file yang terdownload, buka dan jadilah laporan tugas yang kamu mau
 <img src="/public/steps/image8.webp">
+
+### Menjalankan di localhost
+
+1. install semua depend nya
+   ``` pnpm install ``` untuk pnpm
+   ``` npm install ``` untuk npm
+   ``` yarn install ``` untuk yarn
+2. jalankan website di localhost
+   ``` pnpm dev ``` untuk pnpm
+   ``` npm run dev ``` untuk npm
+   ``` yarn dev ``` untuk yarn
+3. Masuk ke link yang tertera di layar command prompt (default nya http://localhost:5173/FlowgorithmToReport/)

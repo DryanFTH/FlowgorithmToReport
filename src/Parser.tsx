@@ -57,8 +57,6 @@ export function tokenizer(Pseudocode: string) {
         }
     })
 
-    console.log(tokens, 'token')
-
     return tokens
 }
 
@@ -122,8 +120,6 @@ export function parse(tokens: CommonNode[]) {
         }
     })
 
-    console.log(ast, stack, 'parse')
-
     return ast
 }
 
@@ -141,8 +137,6 @@ export function parseLevel(ast: CommonNode[], level: number) {
 
         astLevel.push(clone)
     })
-
-    console.log(astLevel, 'level')
 
     return astLevel
 }
